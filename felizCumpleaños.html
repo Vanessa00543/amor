@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños, Mi Amor!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Estrellas de fondo */
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* Contenedor principal */
+        .card-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.2rem;
+            color: #ff758c;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 117, 140, 0.4);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* Pastel interactivo */
+        .cake-wrapper {
+            margin: 20px auto 35px;
+            width: 100px;
+            height: 100px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cake-emoji {
+            font-size: 5rem;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Carta de mensaje */
+        .letter {
+            background: rgba(255, 255, 255, 0.07);
+            border-left: 4px solid #ff416c;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: left;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            font-size: 0.98rem;
+        }
+
+        .letter p {
+            margin-bottom: 12px;
+        }
+
+        .letter p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Rejilla de razones */
+        .reasons-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ff758c;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .grid-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-item span {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        /* Firma */
+        .footer-signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ff758c;
+            margin-top: 10px;
+        }
+
+        /* Adaptabilidad móvil */
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .card-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Estrellas generadas en el fondo -->
+    <div class="star" style="top: 10%; left: 15%; width: 3px; height: 3px; animation-delay: 0s;"></div>
+    <div class="star" style="top: 25%; left: 80%; width: 2px; height: 2px; animation-delay: 1s;"></div>
+    <div class="star" style="top: 50%; left: 10%; width: 4px; height: 4px; animation-delay: 1.5s;"></div>
+    <div class="star" style="top: 70%; left: 85%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+    <div class="star" style="top: 85%; left: 25%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
+
+    <div class="card-container">
+        <span class="badge">Un día muy especial</span>
+        <h1>¡Feliz Cumpleaños!</h1>
+        <p class="subtitle">Para el novio más increíble del mundo ❤️</p>
+
+        <div class="cake-wrapper">
+            <div class="cake-emoji">🎂</div>
+        </div>
+
+        <div class="letter">
+            <p><strong>Hoy celebro tu vida y la suerte que tengo de tenerte a mi lado.</strong></p>
+            <p>Gracias por cada sonrisa, por tus abrazos que curan todo y por ser mi compañero de aventuras favorito. Deseo que este nuevo año de vida esté lleno de metas cumplidas, momentos inolvidables y muchísima felicidad.</p>
+            <p>Quiero seguir celebrando cada uno de tus logros y estar contigo en cada paso del camino.</p>
+        </div>
+
+        <div class="reasons-title">Lo que más me gusta de ti:</div>
+        <div class="grid">
+            <div class="grid-item">
+                <span>😊</span>
+                Tu sonrisa contagiosa
+            </div>
+            <div class="grid-item">
+                <span>🤗</span>
+                Tus mejores abrazos
+            </div>
+            <div class="grid-item">
+                <span>🌟</span>
+                Tu forma de apoyarme
+            </div>
+            <div class="grid-item">
+                <span>❤️</span>
+                El amor que me das
+            </div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #94a3b8;">Con todo mi amor,</p>
+        <div class="footer-signature">Tu persona favorita</div>
+    </div>
+
+</body>
+</html>

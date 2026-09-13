@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños Mi Amor!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-red: #e63946;
+            --rose-pink: #ff758f;
+            --soft-pink: #ffccd5;
+            --dark-pink: #590d22;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --bg-gradient: linear-gradient(135deg, #2b0b14 0%, #590d22 40%, #800f2f 70%, #a4133c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-gradient);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: radial-gradient(circle, var(--rose-pink) 0%, rgba(255,117,143,0) 70%);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.6;
+            animation: floatDown 12s linear infinite;
+        }
+
+        .sparkle {
+            position: absolute;
+            background: var(--gold-light);
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatDown {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) scale(0.8);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg) scale(1.2);
+                opacity: 0.1;
+            }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 6px var(--gold)); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            color: var(--gold-light);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--soft-pink);
+            text-transform: uppercase;
+        }
+
+        /* Menú de Pestañas */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .tab-btn {
+            background: rgba(43, 11, 20, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: var(--soft-pink);
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary-red);
+            color: #fff;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 15px rgba(230, 57, 70, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Paneles de Contenido */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Corazón Latiente */
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .beating-heart {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-red);
+            transform: rotate(-45deg);
+            animation: heartbeat 1.2s infinite ease-in-out;
+            box-shadow: 0 0 40px rgba(230, 57, 70, 0.8);
+        }
+
+        .beating-heart::before,
+        .beating-heart::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+        }
+
+        .beating-heart::before {
+            top: -40px;
+            left: 0;
+        }
+
+        .beating-heart::after {
+            left: 40px;
+            top: 0;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: rotate(-45deg) scale(1); }
+            14% { transform: rotate(-45deg) scale(1.2); }
+            28% { transform: rotate(-45deg) scale(1); }
+            42% { transform: rotate(-45deg) scale(1.15); }
+            70% { transform: rotate(-45deg) scale(1); }
+        }
+
+        /* Carta de Cumpleaños Estilizada */
+        .birthday-letter-card {
+            background: rgba(43, 11, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--gold);
+            border-radius: 25px;
+            padding: 45px 35px;
+            margin: 20px auto 40px;
+            max-width: 850px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.15);
+            position: relative;
+        }
+
+        .birthday-letter-card::before {
+            content: "“";
+            font-family: 'Great Vibes', cursive;
+            font-size: 8rem;
+            color: rgba(212, 175, 55, 0.15);
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+        }
+
+        .letter-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--gold-light);
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .letter-body {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #fff0f5;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        .letter-body p {
+            margin-bottom: 20px;
+            text-indent: 20px;
+        }
+
+        .letter-signature {
+            margin-top: 35px;
+            text-align: right;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: var(--gold);
+        }
+
+        /* Pastel Interactivo */
+        .cake-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .cake {
+            position: relative;
+            width: 140px;
+            height: 100px;
+            background: #ff758f;
+            border-radius: 10px 10px 0 0;
+            margin: 40px auto 0;
+            box-shadow: inset 0 -15px 0 rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: #ffccd5;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .candle {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 35px;
+            background: linear-gradient(to right, #ffffff, #d4af37);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .flame {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 22px;
+            background: orange;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 12px yellow, 0 0 20px orange;
+            animation: flicker 0.1s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .flame.blown-out {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        .blow-instruction {
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* Estilos del Contador de Tiempo */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
+            max-width: 750px;
+            margin: 30px auto 10px;
+        }
+
+        .timer-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--gold);
+            border-radius: 18px;
+            padding: 20px 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .timer-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .timer-number {
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            line-height: 1.1;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: var(--soft-pink);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        /* Flip Cards */
+        .cards-heading {
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.2rem;
+            color: var(--gold-light);
+            margin: 30px 0 20px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 10px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 320px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner,
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .flip-card-front {
+            background: linear-gradient(145deg, rgba(164, 19, 60, 0.8), rgba(89, 13, 34, 0.9));
+            color: var(--gold-light);
+        }
+
+        .flip-card-front i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--rose-pink);
+            text-shadow: 0 0 10px rgba(255, 117, 143, 0.5);
+        }
+
+        .flip-card-front h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .flip-card-front span {
+            font-size: 0.85rem;
+            margin-top: 15px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.2), rgba(43, 11, 20, 0.95));
+            color: #fff;
+            transform: rotateY(180deg);
+            border-color: var(--gold);
+        }
+
+        .flip-card-back p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .flip-card-back i {
+            margin-top: 15px;
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        /* Galería Estilo Polaroid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .polaroid-card {
+            background: #fff;
+            padding: 15px 15px 25px 15px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+            color: #333;
+            text-align: center;
+        }
+
+        .polaroid-card:nth-child(even) {
+            transform: rotate(3deg);
+        }
+
+        .polaroid-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 5;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: #eee;
+        }
+
+        .polaroid-caption {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: var(--dark-pink);
+            margin-top: 12px;
+        }
+
+        /* Secciones de Listas */
+        .reasons-section {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 25px;
+            padding: 40px 20px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+        }
+
+        .reasons-list {
+            list-style: none;
+            max-width: 750px;
+            margin: 30px auto 0;
+        }
+
+        .reasons-list li {
+            padding: 18px 22px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--rose-pink);
+            border-radius: 0 12px 12px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .reasons-list li:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.12);
+            border-left-color: var(--gold);
+        }
+
+        .reasons-list li i {
+            color: var(--rose-pink);
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Regalo Sorpresa */
+        .gift-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed var(--rose-pink);
+            border-radius: 18px;
+            padding: 25px;
+            margin: 30px auto 0;
+            max-width: 600px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gift-box:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold);
+        }
+
+        .gift-content {
+            display: none;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #fff0f5;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: var(--soft-pink);
+            font-size: 0.95rem;
+        }
+
+        footer p span {
+            color: var(--primary-red);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 3.2rem; }
+            .subtitle { font-size: 0.95rem; letter-spacing: 1.5px; }
+            .letter-title { font-size: 2.7rem; }
+            .letter-body { font-size: 1.05rem; }
+            .cards-heading { font-size: 2.5rem; }
+            .tab-btn { padding: 10px 16px; font-size: 0.85rem; }
+            .birthday-letter-card { padding: 30px 20px; }
+            .timer-number { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-particles">
+        <div class="petal" style="left: 10%; width: 15px; height: 15px; animation-duration: 10s; animation-delay: 0s;"></div>
+        <div class="petal" style="left: 25%; width: 22px; height: 22px; animation-duration: 14s; animation-delay: 2s;"></div>
+        <div class="petal" style="left: 40%; width: 18px; height: 18px; animation-duration: 11s; animation-delay: 4s;"></div>
+        <div class="petal" style="left: 60%; width: 25px; height: 25px; animation-duration: 13s; animation-delay: 1s;"></div>
+        <div class="petal" style="left: 75%; width: 14px; height: 14px; animation-duration: 9s; animation-delay: 5s;"></div>
+        <div class="petal" style="left: 90%; width: 20px; height: 20px; animation-duration: 12s; animation-delay: 3s;"></div>
+        
+        <div class="sparkle" style="top: 20%; left: 15%; width: 4px; height: 4px; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="top: 35%; left: 80%; width: 6px; height: 6px; animation-delay: 1.5s;"></div>
+        <div class="sparkle" style="top: 70%; left: 25%; width: 5px; height: 5px; animation-delay: 2.2s;"></div>
+        <div class="sparkle" style="top: 85%; left: 70%; width: 4px; height: 4px; animation-delay: 0.8s;"></div>
+    </div>
+
+    <div class="container">
+        
+        <header>
+            <h1 class="main-title">¡Feliz Cumpleaños Mi Amor!</h1>
+            <p class="subtitle">Celebrando al novio más increíble del mundo</p>
+        </header>
+
+        <!-- Corazón Animado -->
+        <div class="heart-container">
+            <div class="beating-heart"></div>
+        </div>
+
+        <!-- Menú de Pestañas -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab(event, 'tab-carta')">
+                <i class="fas fa-envelope-open-text"></i> Mi Carta Para Ti
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-tiempo')">
+                <i class="fas fa-clock"></i> Tiempo Juntos
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-pastel')">
+                <i class="fas fa-cake-candles"></i> Pide un Deseo
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-momentos')">
+                <i class="fas fa-camera-retro"></i> Nuestros Momentos
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-notas')">
+                <i class="fas fa-heart"></i> Notas Secretas
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-razones')">
+                <i class="fas fa-list-ul"></i> Por Qué Te Amo
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-promesas')">
+                <i class="fas fa-infinity"></i> Mis Promesas
+            </button>
+        </nav>
+
+        <!-- Pestaña 1: La Carta Completa -->
+        <div id="tab-carta" class="tab-panel active">
+            <div class="birthday-letter-card">
+                <h2 class="letter-title">Para el amor de mi vida</h2>
+                <div class="letter-body">
+                    <p>
+                        ¡Feliz cumpleaños al novio más increíble del mundo! Hoy es un día para celebrar tu vida y lo afortunada que soy de tenerte a mi lado. No tienes idea de lo feliz que me hace ver cómo sumas un año más, lleno de metas cumplidas y de momentos hermosos que hemos construido juntos.
+                    </p>
+                    <p>
+                        Gracias por ser mi compañero de aventuras, mi apoyo incondicional y la persona que siempre sabe cómo hacerme sonreír, incluso en los días difíciles. Admiro tu determinación, la forma en que cuidas a los que amas y ese corazón enorme que tienes. Eres mi lugar seguro y mi motivación diaria.
+                    </p>
+                    <p>
+                        En este nuevo año, deseo que alcances todo lo que te propongas y que nunca olvides lo capaz que eres de lograr tus sueños. Yo prometo estar aquí para celebrar tus éxitos, sostenerte en los retos y recordarte, cada día, lo mucho que te amo.
+                    </p>
+                    <p>
+                        Que este año te traiga risas, salud y muchísimas alegrías. ¡Te mereces el mundo entero!
+                    </p>
+                </div>
+                <div class="letter-signature">
+                    Te amo con todo mi corazón ❤️
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña de Conteo de Tiempo (30 de Abril de 2026) -->
+        <div id="tab-tiempo" class="tab-panel">
+            <div class="reasons-section" style="text-align: center;">
+                <h2 class="cards-heading" style="margin-top: 0;">Tiempo Construyendo Nuestra Historia ⏳</h2>
+                <p style="font-size: 1.1rem; color: var(--soft-pink);">Cada segundo a tu lado desde el 30 de abril de 2026 ha sido maravilloso</p>
+                
+                <div class="timer-grid">
+                    <div class="timer-card">
+                        <div class="timer-number" id="days">0</div>
+                        <div class="timer-label">Días</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="hours">0</div>
+                        <div class="timer-label">Horas</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="minutes">0</div>
+                        <div class="timer-label">Minutos</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="seconds">0</div>
+                        <div class="timer-label">Segundos</div>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 30px; font-size: 1.05rem; color: var(--gold-light); font-style: italic;">
+                    "...y esto es solo el comienzo de toda una vida juntos." ❤️
+                </p>
+            </div>
+        </div>
+
+        <!-- Pestaña 2: Pastel Interactivo -->
+        <div id="tab-pastel" class="tab-panel">
+            <div class="reasons-section" style="text-align: center;">
+                <h2 class="cards-heading" style="margin-top: 0;">Haz tu deseo de cumpleaños ✨</h2>
+                <p style="font-size: 1.1rem; color: var(--soft-pink);">Toca la velita del pastel para soplarla y celebrar tu día especial</p>
+                
+                <div class="cake-container">
+                    <div class="cake">
+                        <div class="candle" onclick="blowCandle(this)">
+                            <div class="flame" id="flame"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="blow-instruction" id="candle-text">👆 ¡Haz clic sobre la llama para soplar la vela!</p>
+
+                <!-- Regalo sorpresa -->
+                <div class="gift-box" onclick="toggleGift(this)">
+                    <i class="fas fa-gift" style="font-size: 2.8rem; color: var(--gold);"></i>
+                    <h3 style="margin-top: 12px; color: var(--gold-light);">Toca aquí para abrir tu regalo especial 🎁</h3>
+                    <div class="gift-content">
+                        <p><strong>Mi mayor deseo para ti:</strong> Que nunca pierdas esa chispa tan hermosa que ilumina la vida de quienes te rodeamos, y que la felicidad te acompañe en cada paso que des.</p>
+                        <p style="color: var(--rose-pink); font-weight: 600; margin-top: 15px; font-size: 1.2rem;">¡Feliz cumpleaños mi niño hermoso! ❤️ 🎉</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña 3: Galería de Momentos -->
+        <div id="tab-momentos" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Recuerdos Inolvidables 📸</h2>
+                <p style="text-align: center; color: var(--soft-pink);">Un pequeño recorrido por algunos de los momentos más lindos juntos</p>
+                <div class="gallery-grid">
+
+                    <div class="polaroid-card">
+                        <img src="asset/imagen%20mor3.jpeg" alt="Momento 1" class="polaroid-img">
+                        <div class="polaroid-caption">En cada foto guardo un pedacito de mi felicidad</div>
+                    </div>
+
+                    <div class="polaroid-card">
+                        <img src="asset/imagen2%20mor.jpeg" alt="Momento 2" class="polaroid-img">
+                        <div class="polaroid-caption">Inolvidables momentos juntos 💖 ✨</div>
+                    </div>
+
+                    <div class="polaroid-card">
+                        <video controls class="polaroid-img">
+                            <source src="asset/video mor.mp4" type="video/mp4">
+                        </video>
+                        <div class="polaroid-caption">Cada segundo a tu lado es mi regalo favorito</div>
+                    </div>
+
+                    <div class="polaroid-card">
+                        <img src="asset/tu-nueva-foto.jpeg" alt="Momento 4" class="polaroid-img">
+                        <div class="polaroid-caption">Nuestras aventuras 🌟</div>
+                    </div>
+
+                </div>
+                <p style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--gold-light); font-style: italic;">
+                    (Recuerda que cada foto es un capítulo de nuestra historia, y aún nos esperan muchos más por escribir juntos)
+                </p>
+            </div>
+        </div>
+
+        <!-- Pestaña 4: Notas Secretas -->
+        <div id="tab-notas" class="tab-panel">
+            <h2 class="cards-heading">Toca cada nota secreta...</h2>
+            <div class="cards-grid">
+                
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-star"></i>
+                            <h3>Mi Lugar Favorito</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Mi lugar favorito en todo el mundo no es un sitio geográfico, es justo a tu lado, escuchando tus risas y abrazándote fuerte.</p>
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-shield-halved"></i>
+                            <h3>Mi Refugio</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>En tus brazos encuentro toda la paz que necesito. Gracias por ser mi lugar seguro en todo momento.</p>
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-magic"></i>
+                            <h3>Tu Magia</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Tienes la capacidad de transformar cualquier día ordinario o difícil en un momento mágico lleno de risas.</p>
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Pestaña 5: Por Qué Te Amo -->
+        <div id="tab-razones" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Razones por las que te amo:</h2>
+                <ul class="reasons-list">
+                    <li><i class="fas fa-heart"></i> Por tu determinación inquebrantable y lo capaz que eres de lograr todo.</li>
+                    <li><i class="fas fa-heart"></i> Me haces reír incluso en los días más difíciles.</li>
+                    <li><i class="fas fa-heart"></i> Por la manera en que cuidas a las personas que amas con ese gran corazón.</li>
+                    <li><i class="fas fa-heart"></i> Porque ser tu compañera de aventuras es lo mejor que me ha pasado.</li>
+                    <li><i class="fas fa-heart"></i> Por el cariño que me das todos los días y tu forma en que me amas.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pestaña 6: Mis Promesas -->
+        <div id="tab-promesas" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Lo que te prometo hoy y siempre:</h2>
+                <ul class="reasons-list">
+                    <li><i class="fas fa-infinity"></i> Estar a tu lado para celebrar cada uno de tus éxitos y metas cumplidas.</li>
+                    <li><i class="fas fa-infinity"></i> Sostenerte en los retos y ser tu apoyo incondicional siempre.</li>
+                    <li><i class="fas fa-infinity"></i> Recordarte cada día lo capaz, increíble y valioso que eres.</li>
+                    <li><i class="fas fa-infinity"></i> Amarte con todo mi corazón y cuidar nuestro amor en cada paso.</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Hecho con <span>♥</span> para el novio más maravilloso del mundo.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function showTab(event, tabId) {
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function blowCandle(element) {
+            const flame = document.getElementById('flame');
+            const text = document.getElementById('candle-text');
+            
+            if (!flame.classList.contains('blown-out')) {
+                flame.classList.add('blown-out');
+                text.innerText = "✨ ¡Deseo concedido! ¡Que tengas un año maravilloso!";
+                
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }
+        }
+
+        function toggleGift(element) {
+            const content = element.querySelector('.gift-content');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 50,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 }
+                    });
+                    confetti({
+                        particleCount: 50,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 }
+                    });
+                }
+            }
+        }
+
+        // Lógica del Contador de Tiempo (Desde el 30 de abril de 2026)
+        const startDate = new Date('April 30, 2026 00:00:00').getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const difference = now - startDate;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            } else {
+                // En caso de abrirse antes de la fecha
+                document.getElementById('days').innerText = 0;
+                document.getElementById('hours').innerText = 0;
+                document.getElementById('minutes').innerText = 0;
+                document.getElementById('seconds').innerText = 0;
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+
+</body>
+</html>
+<!-- Reproductor de música de fondo -->
+<div class="music-player">
+    <p>🎵 Nuestra canción:</p>
+    <audio controls loop autoplay>
+        <source src="asset/Ysrael Barajas Miranda León  Ropa de Bazar (Letra_Lyrics).m4a" type="audio/mpeg">
+        Tu navegador no soporta el reproductor de audio.
+    </audio>
+</div>
+<footer>
+    <p>Hecho con <span>♥</span> para el novio más maravilloso del mundo.</p>
+</footer>
+<html></html>
