@@ -3,540 +3,1012 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piano Hero: Conquista de Coronas 👑💖</title>
+    <title>¡Feliz Cumpleaños Mi Amor!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
+        :root {
+            --primary-red: #e63946;
+            --rose-pink: #ff758f;
+            --soft-pink: #ffccd5;
+            --dark-pink: #590d22;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --bg-gradient: linear-gradient(135deg, #2b0b14 0%, #590d22 40%, #800f2f 70%, #a4133c 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
         }
 
         body {
-            background: #1e1e2f;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg-gradient);
+            color: #fff;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        /* --- PANTALLA DE CANDADO INICIAL --- */
+        #lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, #b1537a 0%, #800f2f 60%, #2b0b14 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            padding: 20px;
+        }
+
+        #lock-screen.unlocked {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .lock-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .padlock-body {
+            background: linear-gradient(145deg, #d87297, #aa4465);
+            border-radius: 35px;
+            padding: 30px 25px;
+            width: 320px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.4);
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: white;
-            overflow: hidden;
-            user-select: none;
-            touch-action: manipulation;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: transform 0.1s ease;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 8px;
+        .padlock-body.shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ff4d4d;
         }
 
-        .header h1 {
-            color: #ff7675;
-            font-size: 1.3rem;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-12px); }
+            40%, 80% { transform: translateX(12px); }
         }
 
-        .lives-container {
-            font-size: 1.2rem;
-            margin-top: 2px;
+        .padlock-shackle {
+            width: 140px;
+            height: 110px;
+            border: 18px solid #e0e0e0;
+            border-bottom: none;
+            border-radius: 70px 70px 0 0;
+            position: absolute;
+            top: -95px;
+            z-index: -1;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease;
         }
 
-        .stars-container {
-            font-size: 1.4rem;
-            margin-top: 2px;
-            letter-spacing: 3px;
+        .padlock-body.open .padlock-shackle {
+            transform: translateY(-20px) rotate(-15deg);
         }
 
-        .crown-counter {
-            font-size: 1rem;
-            color: #ffeaa7;
-            font-weight: bold;
-            background: rgba(255, 234, 167, 0.15);
-            padding: 4px 12px;
-            border-radius: 15px;
-            border: 1px solid #ffeaa7;
-            display: inline-block;
-            margin-top: 4px;
-        }
-
-        #gameBoard {
-            width: 330px;
-            height: 480px;
-            background: #2d3436;
-            border: 4px solid #ff7675;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
+        .combination-container {
             display: flex;
-            box-shadow: 0 10px 30px rgba(255, 118, 117, 0.3);
+            gap: 12px;
+            background: rgba(60, 20, 35, 0.4);
+            padding: 15px;
+            border-radius: 20px;
+            margin: 15px 0;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.4);
         }
 
-        .lane {
-            flex: 1;
-            border-right: 1px dashed rgba(255, 255, 255, 0.15);
-            position: relative;
-            height: 100%;
+        .digit-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        .lane:last-child {
-            border-right: none;
-        }
-
-        .hit-line {
-            position: absolute;
-            bottom: 60px;
-            width: 100%;
-            height: 4px;
-            background: #ff7675;
-            box-shadow: 0 0 10px #ff7675;
-            z-index: 5;
-        }
-
-        .tile {
-            position: absolute;
-            width: 100%;
-            height: 80px;
-            background: linear-gradient(180deg, #ff7675 0%, #e84393 100%);
-            border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.3);
+        .digit-display {
+            background: #4a2828;
+            color: #fceade;
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 55px;
+            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
+            border-radius: 10px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.3);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .arrow-btn {
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 26px;
+            border-radius: 6px;
             cursor: pointer;
-            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            transition: background 0.2s;
         }
 
-        /* Estilo especial para las notas largas */
-        .tile.long-tile {
-            height: 180px;
-            background: linear-gradient(180deg, #fd79a8 0%, #6c5ce7 100%);
-            border: 2px solid #ffeaa7;
+        .arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
 
-        .modal {
-            display: none;
-            position: absolute;
+        .unlock-btn {
+            background: #fff;
+            color: #800f2f;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .unlock-btn:hover {
+            transform: scale(1.05);
+            background: var(--gold-light);
+        }
+
+        .error-message {
+            color: #ffb3b3;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            height: 18px;
+            font-weight: 600;
+        }
+
+        .lock-subtitle {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* --- BOTÓN DE MÚSICA --- */
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(212, 175, 55, 0.85);
+            color: #2b0b14;
+            border: 2px solid var(--gold-light);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- ESTILOS GENERALES --- */
+        .bg-particles {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.92);
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: radial-gradient(circle, var(--rose-pink) 0%, rgba(255,117,143,0) 70%);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.6;
+            animation: floatDown 12s linear infinite;
+        }
+
+        @keyframes floatDown {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0.7; }
+            100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0.1; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            color: var(--gold-light);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--soft-pink);
+            text-transform: uppercase;
+        }
+
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .tab-btn {
+            background: rgba(43, 11, 20, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: var(--soft-pink);
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary-red);
+            color: #fff;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 15px rgba(230, 57, 70, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .beating-heart {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-red);
+            transform: rotate(-45deg);
+            animation: heartbeat 1.2s infinite ease-in-out;
+            box-shadow: 0 0 40px rgba(230, 57, 70, 0.8);
+        }
+
+        .beating-heart::before, .beating-heart::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-red);
+            border-radius: 50%;
+        }
+
+        .beating-heart::before { top: -40px; left: 0; }
+        .beating-heart::after { left: 40px; top: 0; }
+
+        @keyframes heartbeat {
+            0% { transform: rotate(-45deg) scale(1); }
+            14% { transform: rotate(-45deg) scale(1.2); }
+            28% { transform: rotate(-45deg) scale(1); }
+            42% { transform: rotate(-45deg) scale(1.15); }
+            70% { transform: rotate(-45deg) scale(1); }
+        }
+
+        .birthday-letter-card {
+            background: rgba(43, 11, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--gold);
+            border-radius: 25px;
+            padding: 45px 35px;
+            margin: 20px auto 40px;
+            max-width: 850px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.15);
+            position: relative;
+        }
+
+        .letter-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--gold-light);
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .letter-body {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #fff0f5;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        .letter-body p { margin-bottom: 20px; text-indent: 20px; }
+
+        .letter-signature {
+            margin-top: 35px;
+            text-align: right;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: var(--gold);
+        }
+
+        .cake-container { text-align: center; margin: 30px 0; }
+
+        .cake {
+            position: relative;
+            width: 140px;
+            height: 100px;
+            background: #ff758f;
+            border-radius: 10px 10px 0 0;
+            margin: 40px auto 0;
+            box-shadow: inset 0 -15px 0 rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: #ffccd5;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .candle {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 35px;
+            background: linear-gradient(to right, #ffffff, #d4af37);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .flame {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 22px;
+            background: orange;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 12px yellow, 0 0 20px orange;
+            animation: flicker 0.1s infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .flame.blown-out {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
+            max-width: 750px;
+            margin: 30px auto 10px;
+        }
+
+        .timer-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--gold);
+            border-radius: 18px;
+            padding: 20px 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .timer-number {
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: var(--soft-pink);
+            text-transform: uppercase;
+        }
+
+        .cards-heading {
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.2rem;
+            color: var(--gold-light);
+            margin: 30px 0 20px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 10px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 320px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .flip-card-front {
+            background: linear-gradient(145deg, rgba(164, 19, 60, 0.8), rgba(89, 13, 34, 0.9));
+            color: var(--gold-light);
+        }
+
+        .flip-card-front i { font-size: 3.5rem; margin-bottom: 20px; color: var(--rose-pink); }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.2), rgba(43, 11, 20, 0.95));
+            color: #fff;
+            transform: rotateY(180deg);
+            border-color: var(--gold);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .polaroid-card {
+            background: #fff;
+            padding: 15px 15px 25px 15px;
+            border-radius: 8px;
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+            color: #333;
             text-align: center;
-            z-index: 50;
-            animation: popIn 0.3s ease-out;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        .polaroid-card:nth-child(even) { transform: rotate(3deg); }
 
-        .modal h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .modal p {
-            font-size: 0.95rem;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            color: #dfe6e9;
-        }
-
-        .song-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .polaroid-img {
             width: 100%;
-            max-width: 260px;
-            margin-bottom: 15px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 4px;
         }
 
-        .song-btn {
-            padding: 10px 12px;
-            background: #34495e;
-            color: white;
-            border: 2px solid #ff7675;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s, transform 0.1s;
+        .polaroid-caption {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: var(--dark-pink);
+            margin-top: 12px;
         }
 
-        .song-btn:hover, .song-btn.active {
-            background: #ff7675;
-            transform: scale(1.02);
-        }
-
-        .btn {
-            padding: 12px 25px;
-            background: #ff7675;
-            color: white;
-            border: none;
+        .reasons-section {
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
+            padding: 40px 20px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+        }
+
+        .reasons-list { list-style: none; max-width: 750px; margin: 30px auto 0; }
+
+        .reasons-list li {
+            padding: 18px 22px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--rose-pink);
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .reasons-list li i { color: var(--rose-pink); margin-right: 15px; }
+
+        .gift-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed var(--rose-pink);
+            border-radius: 18px;
+            padding: 25px;
+            margin: 30px auto 0;
+            max-width: 600px;
+            text-align: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.5);
         }
 
-        .btn-start {
-            background: #00b894;
-        }
+        .gift-content { display: none; margin-top: 15px; }
 
-        .final-stars {
-            font-size: 2.5rem;
-            margin: 10px 0;
-            text-shadow: 0 0 10px #ffeaa7;
+        footer { text-align: center; margin-top: 60px; padding: 20px; color: var(--soft-pink); }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 3.2rem; }
+            .lock-title { font-size: 3rem; }
+            .padlock-body { width: 280px; }
+            .digit-display { width: 45px; height: 50px; font-size: 1.5rem; }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-    <div class="header">
-        <h1 id="songTitleDisplay">Piano pra tii 🎹</h1>
-        <div class="lives-container" id="livesDisplay">💜💚💜</div>
-        <div class="stars-container" id="liveStars">☆☆☆</div>
-        <div class="crown-counter">Coronas de Rey: <span id="totalCrowns">0</span> 👑</div>
-    </div>
+    <!-- MÚSICA DE FONDO -->
+    <audio id="bg-music" loop>
+        <source src="asset/Ysrael Barajas Miranda León  Ropa de Bazar (Letra_Lyrics).m4a" type="audio/mp3">
+    </audio>
 
-    <div id="gameBoard">
-        <div class="hit-line"></div>
-        <div class="lane" data-lane="0"></div>
-        <div class="lane" data-lane="1"></div>
-        <div class="lane" data-lane="2"></div>
-        <div class="lane" data-lane="3"></div>
+    <button class="music-btn" id="music-toggle" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </button>
 
-        <!-- MENU INICIAL -->
-        <div class="modal" id="startScreen" style="display: flex;">
-            <h2>🎵 Canciones para Mi Rey</h2>
-            <p style="font-size:0.8rem;">¡Mantén presionadas las fichas largas ✨! Consigue 3 estrellas ⭐ para ganar tu Corona 👑</p>
+    <!-- Pantalla del Candado Inicial -->
+    <div id="lock-screen">
+        <h1 class="lock-title">Siempre elijo amarte</h1>
+        
+        <div class="padlock-body" id="padlock">
+            <div class="padlock-shackle"></div>
             
-            <div class="song-selector">
-                <button class="song-btn active" onclick="selectSong(0, this)">
-                    <span> nuestra cancion 💜</span>
-                    <span id="badge0">☆☆☆</span>
-                </button>
-                <button class="song-btn" onclick="selectSong(1, this)">
-                    <span>cuco amor de siempre 💚</span>
-                    <span id="badge1">☆☆☆</span>
-                </button>
-                <button class="song-btn" onclick="selectSong(2, this)">
-                    <span>ebrio de amor💜</span>
-                    <span id="badge2">☆☆☆</span>
-                </button>
+            <div style="display: flex; gap: 8px; font-size: 1.2rem; color: #ffccd5; margin-bottom: 5px;">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
             </div>
 
-            <button class="btn btn-start" onclick="startGame()">¡A Jugar por la Corona! 👑</button>
+            <div class="combination-container">
+                <div class="digit-column">
+                    <button class="arrow-btn" onclick="changeDigit(0, 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="digit-display" id="digit-0">00</div>
+                    <button class="arrow-btn" onclick="changeDigit(0, -1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+                <div class="digit-column">
+                    <button class="arrow-btn" onclick="changeDigit(1, 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="digit-display" id="digit-1">00</div>
+                    <button class="arrow-btn" onclick="changeDigit(1, -1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+                <div class="digit-column">
+                    <button class="arrow-btn" onclick="changeDigit(2, 1)"><i class="fas fa-chevron-up"></i></button>
+                    <div class="digit-display" id="digit-2">00</div>
+                    <button class="arrow-btn" onclick="changeDigit(2, -1)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: #ffe6ee; font-style: italic; margin-top: 5px;">El día que nuestra vida fue mejor</p>
+            <div class="error-message" id="error-msg"></div>
+
+            <button class="unlock-btn" onclick="checkCombination()">Abrir ♥</button>
         </div>
 
-        <!-- MODAL DERROTA -->
-        <div class="modal" id="loseModal">
-            <h2 style="color: #ff7675;">¡TE QUEDASTE SIN VIDAS! 😤💥</h2>
-            <p>Perdiste tus 3 corazones y se cortó la música... ¡Cero coronas para ti hasta que lo intentes de nuevo, usssh! 😾💔</p>
-            <button class="btn" onclick="showMenu()">Reintentar 🔄</button>
+        <p class="lock-subtitle">Ingresa la fecha especial para desbloquear</p>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="bg-particles">
+        <div class="petal" style="left: 10%; width: 15px; height: 15px; animation-duration: 10s; animation-delay: 0s;"></div>
+        <div class="petal" style="left: 25%; width: 22px; height: 22px; animation-duration: 14s; animation-delay: 2s;"></div>
+        <div class="petal" style="left: 40%; width: 18px; height: 18px; animation-duration: 11s; animation-delay: 4s;"></div>
+        <div class="petal" style="left: 60%; width: 25px; height: 25px; animation-duration: 13s; animation-delay: 1s;"></div>
+        <div class="petal" style="left: 75%; width: 14px; height: 14px; animation-duration: 9s; animation-delay: 5s;"></div>
+        <div class="petal" style="left: 90%; width: 20px; height: 20px; animation-duration: 12s; animation-delay: 3s;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="main-title">¡Feliz Cumpleaños Mi Amor!</h1>
+            <p class="subtitle">para el niño más increíble del mundo</p>
+        </header>
+
+        <div class="heart-container">
+            <div class="beating-heart"></div>
+        </div> 
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab(event, 'tab-carta')">
+                <i class="fas fa-envelope-open-text"></i> Mi Carta Para Ti
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-tiempo')">
+                <i class="fas fa-clock"></i> Tiempo Juntos
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-pastel')">
+                <i class="fas fa-cake-candles"></i> Pide un Deseo
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-momentos')">
+                <i class="fas fa-camera-retro"></i> Nuestros Momentos
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-notas')">
+                <i class="fas fa-heart"></i> Notas Secretas
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-razones')">
+                <i class="fas fa-list-ul"></i> Por Qué Te Amo
+            </button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-promesas')">
+                <i class="fas fa-infinity"></i> Mis Promesas
+            </button>
+        </nav>
+
+        <div id="tab-carta" class="tab-panel active">
+            <div class="birthday-letter-card">
+                <h2 class="letter-title">Para el amor de mi vida</h2>
+                <div class="letter-body">
+                    <p>¡Feliz cumpleaños al novio más increíble del mundo! Hoy es un día para celebrar tu vida y lo afortunada que soy de tenerte a mi lado. No tienes idea de lo feliz que me hace ver cómo sumas un año más, lleno de metas cumplidas y de momentos hermosos que hemos construido juntos.</p>
+                    <p>Gracias por ser mi compañero de aventuras, mi apoyo incondicional y la persona que siempre sabe cómo hacerme sonreír, incluso en los días difíciles. Admiro tu determinación, la forma en que cuidas a los que amas y ese corazón enorme que tienes. Eres mi lugar seguro y mi motivación diaria.</p>
+                    <p>En este nuevo año, deseo que alcances todo lo que te propongas y que nunca olvides lo capaz que eres de lograr tus sueños. Yo prometo estar aquí para celebrar tus éxitos, sostenerte en los retos y recordarte, cada día, lo mucho que te amo.</p>
+                    <p>Que este año te traiga risas, salud y muchísimas alegrías. ¡Te mereces el mundo entero!</p>
+                </div>
+                <div class="letter-signature">
+                    Te amo con todo mi corazón ❤️
+                </div>
+            </div>
         </div>
 
-        <!-- MODAL VICTORIA -->
-        <div class="modal" id="winModal">
-            <h2 style="color: #ffeaa7;">¡3 ESTRELLAS ALCANZADAS! ⭐⭐⭐</h2>
-            <div class="final-stars">👑⭐👑</div>
-            <p id="winMessage">¡Completaste la canción exitosamente! Te has ganado tu corona real, mi niño hermoso 💕</p>
-            <button class="btn" onclick="showMenu()">Ver mis Coronas 👑</button>
+        <div id="tab-tiempo" class="tab-panel">
+            <div class="reasons-section" style="text-align: center;">
+                <h2 class="cards-heading" style="margin-top: 0;">Tiempo Construyendo Nuestra Historia ⏳</h2>
+                <p style="font-size: 1.1rem; color: var(--soft-pink);">Cada segundo a tu lado desde el 30 de abril de 2026 ha sido maravilloso</p>
+                
+                <div class="timer-grid">
+                    <div class="timer-card">
+                        <div class="timer-number" id="days">0</div>
+                        <div class="timer-label">Días</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="hours">0</div>
+                        <div class="timer-label">Horas</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="minutes">0</div>
+                        <div class="timer-label">Minutos</div>
+                    </div>
+                    <div class="timer-card">
+                        <div class="timer-number" id="seconds">0</div>
+                        <div class="timer-label">Segundos</div>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 30px; font-size: 1.05rem; color: var(--gold-light); font-style: italic;">
+                    "...y esto es solo el comienzo de toda una vida juntos." ❤️
+                </p>
+            </div>
+        </div>
+
+        <div id="tab-pastel" class="tab-panel">
+            <div class="reasons-section" style="text-align: center;">
+                <h2 class="cards-heading" style="margin-top: 0;">Haz tu deseo de cumpleaños ✨</h2>
+                <p style="font-size: 1.1rem; color: var(--soft-pink);">Toca la velita del pastel para soplarla y celebrar tu día especial</p>
+                
+                <div class="cake-container">
+                    <div class="cake">
+                        <div class="candle" onclick="blowCandle(this)">
+                            <div class="flame" id="flame"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="blow-instruction" id="candle-text" style="color: var(--gold-light); margin-top: 15px; font-style: italic;">👆 ¡Haz clic sobre la llama para soplar la vela!</p>
+
+                <div class="gift-box" onclick="toggleGift(this)">
+                    <i class="fas fa-gift" style="font-size: 2.8rem; color: var(--gold);"></i>
+                    <h3 style="margin-top: 12px; color: var(--gold-light);">Toca aquí para abrir tu regalo especial 🎁</h3>
+                    <div class="gift-content">
+                        <p><strong>Mi mayor deseo para ti:</strong> Que nunca pierdas esa chispa tan hermosa que ilumina la vida de quienes te rodeamos, y que la felicidad te acompañe en cada paso que des.</p>
+                        <p style="color: var(--rose-pink); font-weight: 600; margin-top: 15px; font-size: 1.2rem;">¡Feliz cumpleaños mi niño hermoso! ❤️ 🎉</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-momentos" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Recuerdos Inolvidables 📸</h2>
+                <p style="text-align: center; color: var(--soft-pink);">Un pequeño recorrido por algunos de los momentos más lindos juntos</p>
+                <div class="gallery-grid">
+                    <div class="polaroid-card">
+                        <img src="asset/imagen%20mor3.jpeg" alt="Momento 1" class="polaroid-img">
+                        <div class="polaroid-caption">En cada foto guardo un pedacito de mi felicidad</div>
+                    </div>
+                    <div class="polaroid-card">
+                        <img src="asset/imagen2%20mor.jpeg" alt="Momento 2" class="polaroid-img">
+                        <div class="polaroid-caption">Inolvidables momentos juntos 💖 ✨</div>
+                    </div>
+                    <div class="polaroid-card">
+                        <video controls class="polaroid-img">
+                            <source src="asset/video mor.mp4" type="video/mp4">
+                        </video>
+                        <div class="polaroid-caption">Cada segundo a tu lado es mi regalo favorito</div>
+                    </div>
+                    <div class="polaroid-card">
+                        <video controls class="polaroid-img">
+                            <source src="asset/videoo 2.mp4" type="video/mp4">
+                        </video>
+                        <div class="polaroid-caption">Nuestras aventuras 🌟</div>
+                    </div>
+                    //nueva sección de momentos
+                    <div class="polaroid-card">
+                        <img src="asset/tu-nueva-imagen-1.jpeg" alt="Momento 3" class="polaroid-img">
+                        <div class="polaroid-caption">Escribe tu frase aquí ✨</div>
+                    </div>
+                    //nueva sección de momentos
+                    <div class="polaroid-card">
+                        <img src="asset/tu-nueva-imagen-2.jpeg" alt="Momento 4" class="polaroid-img">
+                        <div class="polaroid-caption">Escribe tu frase aquí 💖</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-notas" class="tab-panel">
+            <h2 class="cards-heading">Toca cada nota secreta...</h2>
+            <div class="cards-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-star"></i>
+                            <h3>Mi Lugar Favorito</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Mi lugar favorito en todo el mundo no es un sitio geográfico, es justo a tu lado, escuchando tus risas y abrazándote fuerte.</p>
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-shield-halved"></i>
+                            <h3>Mi Refugio</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>En tus brazos encuentro toda la paz que necesito. Gracias por ser mi lugar seguro en todo momento.</p>
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-magic"></i>
+                            <h3>Tu Magia</h3>
+                            <span>(Toca aquí)</span>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Tienes la capacidad de transformar cualquier día ordinario o difícil en un momento mágico lleno de risas.</p>
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-razones" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Razones por las que te amo:</h2>
+                <ul class="reasons-list">
+                    <li><i class="fas fa-heart"></i> Por la forma tan bonita que tienes de hacerme sonreír incluso en mis días más grises.</li>
+                    <li><i class="fas fa-heart"></i> Porque tu paciencia y tu forma de entender el mundo me inspiran a ser mejor cada día.</li>
+                    <li><i class="fas fa-heart"></i> Por cada risa compartida, cada abrazo sincero y cada charla que se vuelve eterna a tu lado.</li>
+                    <li><i class="fas fa-heart"></i> Porque a tu lado descubrí lo que se siente tener un hogar en los brazos de alguien.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="tab-promesas" class="tab-panel">
+            <div class="reasons-section">
+                <h2 class="cards-heading" style="margin-top: 0;">Mis Promesas Para Ti ♾️</h2>
+                <ul class="reasons-list">
+                    <li><i class="fas fa-infinity"></i> Prometo amarte, respetarte y cuidarte todos los días de mi vida.</li>
+                    <li><i class="fas fa-infinity"></i> Prometo ser tu apoyo incondicional en cada meta y sueño que te propongas.</li>
+                    <li><i class="fas fa-infinity"></i> Prometo hacerte sonreír y recordarte lo mucho que vales cada vez que lo necesites.</li>
+                      <li><i class="fas fa-infinity"></i> Prometo construir juntos un futuro lleno de aventuras, risas y momentos inolvidables.</li>
+                      <li><i class="fas fa-infinity"></i> Prometo que cada día a tu lado será un recordatorio de lo afortunada que soy de tenerte en mi vida.</li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- AUDIO EN LÍNEA -->
-    <audio id="audio0" src="asset/Ysrael Barajas Miranda León  Ropa de Bazar (Letra_Lyrics).m4a" preload="auto"></audio>
-    <audio id="audio1" src="asset/CUCO  Amor de Siempre (Official Audio).m4a" preload="auto"></audio>
-    <audio id="audio2" src="asset/Ebrio de Amor (En Vivo).m4a" preload="auto"></audio>
-   <script>
-        const songList = [
-            {
-                name: "nuestra cancion 💜",
-                baseSpeed: 3.0,
-                baseSpawnRate: 750,
-                totalNotes: 60,
-                audioId: "audio0",
-                crownWon: false
-            },
-            {
-                name: "cuco amor de siempre 💚",
-                baseSpeed: 3.5,
-                baseSpawnRate: 650,
-                totalNotes: 75,
-                audioId: "audio1",
-                crownWon: false
-            },
-            {
-                name: "ebrio de amor💜",
-                baseSpeed: 4.0,
-                baseSpawnRate: 550,
-                totalNotes: 90,
-                audioId: "audio2",
-                crownWon: false
-            }
-        ];
+    <footer>
+        <p>Hecho con todo el amor del mundo para ti ❤️</p>
+    </footer>
 
-        let currentSongIndex = 0;
-        let score = 0;
-        let lives = 3;
-        let totalCrownsCount = 0;
-        let gameActive = false;
-        let activeTiles = [];
-        let spawnInterval;
-        let currentAudio = null;
-        let currentSpeed = 3.0;
-        let currentSpawnRate = 750;
-        let lastLane = -1;
+    <!-- SCRIPTS DE FUNCIONALIDAD -->
+    <script>
+        let digits = [0, 0, 0];
+        const correctCombination = [30, 4, 26]; // Cambia la combinación aquí si lo deseas
 
-        const lanes = document.querySelectorAll('.lane');
-        const liveStars = document.getElementById('liveStars');
-        const livesDisplay = document.getElementById('livesDisplay');
-        const totalCrowns = document.getElementById('totalCrowns');
-        const songTitleDisplay = document.getElementById('songTitleDisplay');
-        const loseModal = document.getElementById('loseModal');
-        const winModal = document.getElementById('winModal');
-        const startScreen = document.getElementById('startScreen');
-
-        function selectSong(index, btnElem) {
-            currentSongIndex = index;
-            document.querySelectorAll('.song-btn').forEach(btn => btn.classList.remove('active'));
-            btnElem.classList.add('active');
-        }
-
-        function updateLivesDisplay() {
-            if (lives === 3) livesDisplay.innerText = "💜💚💜";
-            else if (lives === 2) livesDisplay.innerText = "💜💚🖤";
-            else if (lives === 1) livesDisplay.innerText = "💜🖤🖤";
-            else livesDisplay.innerText = "🖤🖤🖤";
-        }
-
-        function updateStarsDisplay() {
-            const song = songList[currentSongIndex];
-            const notesPerStar = song.totalNotes / 3;
-            let currentStars = Math.floor(score / notesPerStar);
-
-            if (currentStars === 0) liveStars.innerText = "☆☆☆";
-            else if (currentStars === 1) liveStars.innerText = "⭐☆☆";
-            else if (currentStars === 2) liveStars.innerText = "⭐⭐☆";
-            else if (currentStars >= 3) liveStars.innerText = "⭐⭐⭐";
-        }
-
-        function stopCurrentAudio() {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        }
-
-        function showMenu() {
-            stopCurrentAudio();
-            loseModal.style.display = 'none';
-            winModal.style.display = 'none';
-            startScreen.style.display = 'flex';
-            liveStars.innerText = "☆☆☆";
-            lives = 3;
-            updateLivesDisplay();
-        }
-
-        function resetSpawnInterval() {
-            clearInterval(spawnInterval);
-            spawnInterval = setInterval(spawnTile, currentSpawnRate);
-        }
-
-        function startGame() {
-            stopCurrentAudio();
-            const song = songList[currentSongIndex];
+        function changeDigit(index, delta) {
+            digits[index] += delta;
+            if (digits[index] > 99) digits[index] = 0;
+            if (digits[index] < 0) digits[index] = 99;
             
-            songTitleDisplay.innerText = song.name;
-
-            startScreen.style.display = 'none';
-            loseModal.style.display = 'none';
-            winModal.style.display = 'none';
-
-            activeTiles.forEach(t => t.element.remove());
-            activeTiles = [];
-
-            score = 0;
-            lives = 3;
-            lastLane = -1;
-            currentSpeed = song.baseSpeed;
-            currentSpawnRate = song.baseSpawnRate;
-
-            updateLivesDisplay();
-            updateStarsDisplay();
-            gameActive = true;
-
-            currentAudio = document.getElementById(song.audioId);
-            if (currentAudio) {
-                currentAudio.currentTime = 0;
-                currentAudio.play().catch(err => console.log("Audio ready"));
-            }
-
-            resetSpawnInterval();
-            requestAnimationFrame(updateGame);
+            document.getElementById(`digit-${index}`).innerText = String(digits[index]).padStart(2, '0');
         }
 
-        function registerHit() {
-            score++;
-            updateStarsDisplay();
-
-            const song = songList[currentSongIndex];
-            const progressMultiplier = 1 + (score / song.totalNotes);
+        function checkCombination() {
+            const padlock = document.getElementById('padlock');
+            const errorMsg = document.getElementById('error-msg');
             
-            currentSpeed = song.baseSpeed * progressMultiplier;
-            
-            const newSpawnRate = Math.max(300, Math.floor(song.baseSpawnRate / progressMultiplier));
-            if (Math.abs(newSpawnRate - currentSpawnRate) > 30) {
-                currentSpawnRate = newSpawnRate;
-                resetSpawnInterval();
-            }
+            const isCorrect = digits[0] === correctCombination[0] && 
+                              digits[1] === correctCombination[1] && 
+                              digits[2] === correctCombination[2];
 
-            if (score >= song.totalNotes) {
-                winGame();
+            if (isCorrect) {
+                padlock.classList.add('open');
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                setTimeout(() => {
+                    document.getElementById('lock-screen').classList.add('unlocked');
+                }, 600);
+            } else {
+                padlock.classList.add('shake');
+                errorMsg.innerText = "Combinación incorrecta, prueba de nuevo ❤️";
+                setTimeout(() => {
+                    padlock.classList.remove('shake');
+                }, 400);
             }
         }
 
-        function spawnTile() {
-            if (!gameActive) return;
+        function showTab(evt, tabId) {
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
 
-            // Previene que aparezcan 2 notas en el mismo carril seguido
-            let randomLane;
-            do {
-                randomLane = Math.floor(Math.random() * 4);
-            } while (randomLane === lastLane);
-            lastLane = randomLane;
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-            const laneElem = lanes[randomLane];
-            const isLong = Math.random() < 0.3; // 30% de probabilidad de ser nota larga
-            const tileHeight = isLong ? 180 : 80;
-
-            const tile = document.createElement('div');
-            tile.classList.add('tile');
-            if (isLong) tile.classList.add('long-tile');
-            
-            tile.innerText = isLong ? '✨' : '💜';
-            tile.style.top = `-${tileHeight}px`;
-
-            laneElem.appendChild(tile);
-
-            const tileData = {
-                element: tile,
-                y: -tileHeight,
-                height: tileHeight,
-                isLong: isLong,
-                holding: false,
-                clicked: false,
-                holdProgress: 0
-            };
-
-            const startPress = (e) => {
-                e.preventDefault();
-                if (!gameActive || tileData.clicked) return;
-
-                if (!tileData.isLong) {
-                    tileData.clicked = true;
-                    tile.style.transform = 'scale(0.85)';
-                    tile.style.opacity = '0';
-                    registerHit();
-                    setTimeout(() => tile.remove(), 100);
-                } else {
-                    tileData.holding = true;
-                }
-            };
-
-            const endPress = (e) => {
-                if (tileData.isLong && tileData.holding && !tileData.clicked) {
-                    tileData.holding = false;
-                }
-            };
-
-            tile.addEventListener('mousedown', startPress);
-            tile.addEventListener('touchstart', startPress);
-            window.addEventListener('mouseup', endPress);
-            window.addEventListener('touchend', endPress);
-
-            activeTiles.push(tileData);
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
 
-        function updateGame() {
-            if (!gameActive) return;
-
-            for (let i = activeTiles.length - 1; i >= 0; i--) {
-                const t = activeTiles[i];
-                if (t.clicked) continue;
-
-                t.y += currentSpeed;
-                t.element.style.top = `${t.y}px`;
-
-                // Lógica de sostenido para notas largas
-                if (t.isLong && t.holding) {
-                    t.holdProgress += 1;
-                    if (t.holdProgress % 12 === 0) { // Incrementa puntos al mantener presionado
-                        registerHit();
-                    }
-                    if (t.y + t.height >= 420) {
-                        t.clicked = true;
-                        t.element.style.opacity = '0';
-                        setTimeout(() => t.element.remove(), 100);
-                    }
-                }
-
-                // Si la nota sale completamente de la pantalla sin presionarla
-                if (t.y > 480) {
-                    t.clicked = true;
-                    t.element.remove();
-                    lives--;
-                    updateLivesDisplay();
-
-                    if (lives <= 0) {
-                        gameOver();
-                        return;
-                    }
-                }
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            if (music.paused) {
+                music.play();
+                btn.innerHTML = '<i class="fas fa-volume-high"></i>';
+            } else {
+                music.pause();
+                btn.innerHTML = '<i class="fas fa-music"></i>';
             }
-
-            requestAnimationFrame(updateGame);
         }
 
-        function gameOver() {
-            gameActive = false;
-            clearInterval(spawnInterval);
-            stopCurrentAudio();
-            loseModal.style.display = 'flex';
-        }
+        const startDate = new Date('2026-04-30T00:00:00');
 
-        function winGame() {
-            gameActive = false;
-            clearInterval(spawnInterval);
-            stopCurrentAudio();
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
 
-            const song = songList[currentSongIndex];
-            
-            if (!song.crownWon) {
-                song.crownWon = true;
-                totalCrownsCount++;
-                totalCrowns.innerText = totalCrownsCount;
-                document.getElementById(`badge${currentSongIndex}`).innerText = "👑 ⭐⭐⭐";
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                const dEl = document.getElementById('days');
+                const hEl = document.getElementById('hours');
+                const mEl = document.getElementById('minutes');
+                const sEl = document.getElementById('seconds');
+
+                if (dEl) dEl.innerText = days;
+                if (hEl) hEl.innerText = hours;
+                if (mEl) mEl.innerText = minutes;
+                if (sEl) sEl.innerText = seconds;
             }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
-            winModal.style.display = 'flex';
+        function blowCandle(element) {
+            const flame = document.getElementById('flame');
+            const text = document.getElementById('candle-text');
+            if (!flame.classList.contains('blown-out')) {
+                flame.classList.add('blown-out');
+                text.innerText = "¡Feliz Cumpleaños! Tu deseo se ha guardado en mi corazón ✨";
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+            }
+        }
 
-            confetti({
-                particleCount: 180,
-                spread: 120,
-                origin: { y: 0.6 }
-            });
+        function toggleGift(element) {
+            const content = element.querySelector('.gift-content');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+                confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 } });
+            }
         }
     </script>
 </body>
